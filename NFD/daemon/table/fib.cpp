@@ -119,6 +119,7 @@ Fib::findExactMatch(const Name& prefix) const
 std::pair<shared_ptr<fib::Entry>, bool>
 Fib::insert(const Name& prefix)
 {
+std::cout<< "Fib::insert " << prefix << std::endl;
   shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.lookup(prefix);
   shared_ptr<fib::Entry> entry = nameTreeEntry->getFibEntry();
   if (static_cast<bool>(entry))
@@ -132,6 +133,7 @@ Fib::insert(const Name& prefix)
 void
 Fib::erase(shared_ptr<name_tree::Entry> nameTreeEntry)
 {
+//std::cout<< "Fib::erase " << nameTreeEntry.getPrefix() << std::endl;
   nameTreeEntry->setFibEntry(shared_ptr<fib::Entry>());
   m_nameTree.eraseEntryIfEmpty(nameTreeEntry);
   --m_nItems;
