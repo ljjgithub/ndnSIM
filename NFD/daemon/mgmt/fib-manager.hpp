@@ -58,13 +58,18 @@ private:
   void
   onValidatedFibRequest(const shared_ptr<const Interest>& request);
 
+/*//old version
   void
   addNextHop(ControlParameters& parameters,
-             ControlResponse& response);
+             ControlResponse& response);*/
+
+  void
+  addNextHop(ControlParameters& parameters,
+             ControlResponse& response, int level);
 
   void
   removeNextHop(ControlParameters& parameters,
-                ControlResponse& response);
+                ControlResponse& response, int level);
 
   void
   listEntries(const Interest& request);
@@ -77,7 +82,8 @@ private:
 
   typedef function<void(FibManager*,
                         ControlParameters&,
-                        ControlResponse&)> SignedVerbProcessor;
+                        ControlResponse&,
+                        int level)> SignedVerbProcessor;
 
   typedef std::map<Name::Component, SignedVerbProcessor> SignedVerbDispatchTable;
 

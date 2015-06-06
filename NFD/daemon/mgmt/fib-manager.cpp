@@ -167,7 +167,7 @@ FibManager::onValidatedFibRequest(const shared_ptr<const Interest>& request)
 
       NFD_LOG_DEBUG("command result: processing verb: " << verb);
       ControlResponse response;
-      (verbProcessor->second)(this, parameters, response);
+      (verbProcessor->second)(this, parameters, response, -1);
       sendResponse(command, response);
     }
   else
@@ -179,7 +179,7 @@ FibManager::onValidatedFibRequest(const shared_ptr<const Interest>& request)
 
 void
 FibManager::addNextHop(ControlParameters& parameters,
-                       ControlResponse& response)
+                       ControlResponse& response, int level)
 {
   ndn::nfd::FibAddNextHopCommand command;
 
@@ -201,7 +201,7 @@ FibManager::addNextHop(ControlParameters& parameters,
   shared_ptr<Face> nextHopFace = m_getFace(faceId);
   if (static_cast<bool>(nextHopFace))
     {
-      shared_ptr<fib::Entry> entry = m_managedFib.insert(prefix).first;
+      shared_ptr<fib::Entry> entry = m_managedFib.insert(prefix,level).first;
 
       entry->addNextHop(nextHopFace, cost);
 
@@ -221,7 +221,7 @@ FibManager::addNextHop(ControlParameters& parameters,
 
 void
 FibManager::removeNextHop(ControlParameters& parameters,
-                          ControlResponse& response)
+                          ControlResponse& response, int level)
 {
   ndn::nfd::FibRemoveNextHopCommand command;
   if (!validateParameters(command, parameters))

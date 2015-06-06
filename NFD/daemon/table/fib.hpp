@@ -74,7 +74,8 @@ public: // mutation
    *  \return{ the entry, and true for new entry, false for existing entry }
    */
   std::pair<shared_ptr<fib::Entry>, bool>
-  insert(const Name& prefix);
+  //insert(const Name& prefix);
+  insert(const Name& prefix, int level);
 
   void
   erase(const Name& prefix);

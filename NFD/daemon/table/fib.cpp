@@ -116,6 +116,8 @@ Fib::findExactMatch(const Name& prefix) const
   return shared_ptr<fib::Entry>();
 }
 
+/*
+//old version
 std::pair<shared_ptr<fib::Entry>, bool>
 Fib::insert(const Name& prefix)
 {
@@ -125,6 +127,36 @@ std::cout<< "Fib::insert " << prefix << std::endl;
   if (static_cast<bool>(entry))
     return std::make_pair(entry, false);
   entry = make_shared<fib::Entry>(prefix);
+  nameTreeEntry->setFibEntry(entry);
+  ++m_nItems;
+  return std::make_pair(entry, true);
+}*/
+
+std::pair<shared_ptr<fib::Entry>, bool>
+Fib::insert(const Name& prefix, int level)
+{
+  Name prefix_new;
+  if(level>=0)
+  {
+    prefix_new.append(prefix.get(level));
+    if(level+1<prefix.size())
+      prefix_new.append(prefix.get(level+1));
+  }
+  else
+  {
+    for(size_t i=0;i<prefix.size();++i)
+    {
+      prefix_new.append(prefix.get(i));
+    }
+  }
+
+
+std::cout<< "Fib::insert " << prefix_new << std::endl;
+  shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.lookup(prefix_new);
+  shared_ptr<fib::Entry> entry = nameTreeEntry->getFibEntry();
+  if (static_cast<bool>(entry))
+    return std::make_pair(entry, false);
+  entry = make_shared<fib::Entry>(prefix_new);
   nameTreeEntry->setFibEntry(entry);
   ++m_nItems;
   return std::make_pair(entry, true);
