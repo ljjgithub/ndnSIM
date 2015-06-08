@@ -51,6 +51,8 @@ NS_LOG_COMPONENT_DEFINE("ndn.FibHelper");
 void
 FibHelper::AddNextHop(const ControlParameters& parameters, Ptr<Node> node)
 {
+  int level = 0;
+
   NS_LOG_DEBUG("Add Next Hop command was initialized");
   Block encodedParameters(parameters.wireEncode());
 
@@ -63,12 +65,27 @@ FibHelper::AddNextHop(const ControlParameters& parameters, Ptr<Node> node)
 
   Ptr<L3Protocol> l3protocol = node->GetObject<L3Protocol>();
   shared_ptr<nfd::FibManager> fibManager = l3protocol->getFibManager();
-  fibManager->onFibRequest(*command);
+
+  //count level
+  std::string name = Names::FindName(node);
+  for(int i=0;i<name.length();++i)
+  {
+std::cout<<name[i]<<' ';
+    if(name[i]=='-')
+      level++;
+  }
+std::cout<<level<<std::endl;
+  //command->setLevel(level);
+command->setScope(level);
+
+  fibManager->onFibRequest(*command, level);
 }
 
 void
 FibHelper::RemoveNextHop(const ControlParameters& parameters, Ptr<Node> node)
 {
+  int level = 0;
+
   NS_LOG_DEBUG("Remove Next Hop command was initialized");
   Block encodedParameters(parameters.wireEncode());
 
@@ -82,7 +99,7 @@ FibHelper::RemoveNextHop(const ControlParameters& parameters, Ptr<Node> node)
   Ptr<L3Protocol> L3protocol = node->GetObject<L3Protocol>();
   shared_ptr<nfd::FibManager> fibManager = L3protocol->getFibManager();
   // fibManager->addInterestRule(commandName.toUri(), key, *keyChain.getPublicKey (key));
-  fibManager->onFibRequest(*command);
+  fibManager->onFibRequest(*command, level);
 }
 
 void

@@ -49,7 +49,7 @@ std::string getNodePrefix(std::string s)
   {
     outs+=s.substr(index,s.length()-index);
   }
-  std::cout<<outs<<endl;
+  //std::cout<<outs<<endl;
   return outs;
 }
 

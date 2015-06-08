@@ -50,6 +50,8 @@ InternalFace::sendInterest(const Interest& interest)
 void
 InternalFace::processInterest(const shared_ptr<const Interest>& interest)
 {
+  int level=0;
+
   if (m_interestFilters.size() == 0)
     {
       NFD_LOG_DEBUG("no Interest filters to match against");
@@ -84,7 +86,7 @@ InternalFace::processInterest(const shared_ptr<const Interest>& interest)
       if (filter->first.isPrefixOf(interestName))
         {
           NFD_LOG_DEBUG("found Interest filter for " << filter->first << " (before end match)");
-          filter->second(interestName, *interest);
+          filter->second(interestName, *interest, level);
         }
       else
         {
@@ -94,7 +96,7 @@ InternalFace::processInterest(const shared_ptr<const Interest>& interest)
   else if (filter->first == interestName)
     {
       NFD_LOG_DEBUG("found Interest filter for " << filter->first << " (exact match)");
-      filter->second(interestName, *interest);
+      filter->second(interestName, *interest, level);
     }
   else if (filter != m_interestFilters.begin())
     {
@@ -105,7 +107,7 @@ InternalFace::processInterest(const shared_ptr<const Interest>& interest)
       if (filter->first.isPrefixOf(interestName))
         {
           NFD_LOG_DEBUG("found Interest filter for " << filter->first << " (previous match)");
-          filter->second(interestName, *interest);
+          filter->second(interestName, *interest, level);
         }
       else
         {
@@ -137,6 +139,7 @@ InternalFace::setInterestFilter(const Name& filter,
 {
   NFD_LOG_INFO("registering callback for " << filter);
   m_interestFilters[filter] = onInterest;
+//std::cout<<"registering callback for " << filter<<std::endl;
 }
 
 void

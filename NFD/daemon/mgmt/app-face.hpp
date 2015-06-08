@@ -32,7 +32,7 @@
 
 namespace nfd {
 
-typedef function<void(const Name&, const Interest&)> OnInterest;
+typedef function<void(const Name&, const Interest&, int level)> OnInterest;
 
 class AppFace
 {

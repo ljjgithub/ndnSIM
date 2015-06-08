@@ -51,7 +51,7 @@ public:
   ~FibManager();
 
   void
-  onFibRequest(const Interest& request);
+  onFibRequest(const Interest& request, const int& level);
 
 private:
 

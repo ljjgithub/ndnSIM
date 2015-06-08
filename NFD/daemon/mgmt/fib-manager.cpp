@@ -91,7 +91,7 @@ FibManager::FibManager(Fib& fib,
                            (sizeof(UNSIGNED_COMMAND_VERBS) / sizeof(UnsignedVerbAndProcessor)))
 {
   face->setInterestFilter("/localhost/nfd/fib",
-                          bind(&FibManager::onFibRequest, this, _2));
+                          bind(&FibManager::onFibRequest, this, _2, _3));//"_1, _2" is wrong!!!
 }
 
 FibManager::~FibManager()
@@ -100,7 +100,7 @@ FibManager::~FibManager()
 }
 
 void
-FibManager::onFibRequest(const Interest& request)
+FibManager::onFibRequest(const Interest& request, const int& level)
 {
   const Name& command = request.getName();
   const size_t commandNComps = command.size();
@@ -148,6 +148,10 @@ FibManager::onValidatedFibRequest(const shared_ptr<const Interest>& request)
   const Name::Component& verb = command[COMMAND_PREFIX.size()];
   const Name::Component& parameterComponent = command[COMMAND_PREFIX.size() + 1];
 
+  //int level = request->getLevel();
+int level=request->getScope();
+//std::cout<<"request->getScope(): "<<request->getScope()<<std::endl;
+
   SignedVerbDispatchTable::const_iterator verbProcessor = m_signedVerbDispatch.find(verb);
   if (verbProcessor != m_signedVerbDispatch.end())
     {
@@ -167,7 +171,7 @@ FibManager::onValidatedFibRequest(const shared_ptr<const Interest>& request)
 
       NFD_LOG_DEBUG("command result: processing verb: " << verb);
       ControlResponse response;
-      (verbProcessor->second)(this, parameters, response, -1);
+      (verbProcessor->second)(this, parameters, response, level);//send the level
       sendResponse(command, response);
     }
   else
@@ -197,6 +201,7 @@ FibManager::addNextHop(ControlParameters& parameters,
   NFD_LOG_TRACE("add-nexthop prefix: " << prefix
                 << " faceid: " << faceId
                 << " cost: " << cost);
+//std::cout<< " faceid: " << faceId << " cost: " << cost << "  " <<parameters.getOrigin()<<std::endl;
 
   shared_ptr<Face> nextHopFace = m_getFace(faceId);
   if (static_cast<bool>(nextHopFace))
