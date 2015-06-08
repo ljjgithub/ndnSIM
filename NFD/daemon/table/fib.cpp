@@ -138,7 +138,7 @@ Fib::insert(const Name& prefix, int level)
   Name prefix_new;
   if(level>=0)
   {
-    prefix_new.append(prefix.get(level));
+    //prefix_new.append(prefix.get(level));
     if(level+1<prefix.size())
       prefix_new.append(prefix.get(level+1));
   }

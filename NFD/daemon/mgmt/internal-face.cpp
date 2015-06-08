@@ -140,6 +140,7 @@ InternalFace::setInterestFilter(const Name& filter,
   NFD_LOG_INFO("registering callback for " << filter);
   m_interestFilters[filter] = onInterest;
 //std::cout<<"registering callback for " << filter<<std::endl;
+//OnInterest has been modified in app-face.hpp!!!!!!!!!!!!!!!!
 }
 
 void

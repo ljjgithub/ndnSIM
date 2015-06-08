@@ -70,11 +70,11 @@ FibHelper::AddNextHop(const ControlParameters& parameters, Ptr<Node> node)
   std::string name = Names::FindName(node);
   for(int i=0;i<name.length();++i)
   {
-std::cout<<name[i]<<' ';
+//std::cout<<name[i]<<' ';
     if(name[i]=='-')
       level++;
   }
-std::cout<<level<<std::endl;
+//std::cout<<level<<std::endl;
   //command->setLevel(level);
 command->setScope(level);
 
