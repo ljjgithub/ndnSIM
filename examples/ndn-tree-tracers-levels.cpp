@@ -77,14 +77,14 @@ main(int argc, char* argv[])
   // Getting containers for the consumer/producer
   Ptr<Node> consumers[4] = {
 Names::Find<Node>("root"),
-Names::Find<Node>("root-0"), Names::Find<Node>("root-1"), Names::Find<Node>("root-2")
+Names::Find<Node>("root-build0"), Names::Find<Node>("root-build1"), Names::Find<Node>("root-build2")
 			   };
   Ptr<Node> producers[15] = {
-Names::Find<Node>("root-0-0-0"), Names::Find<Node>("root-0-0-1"), Names::Find<Node>("root-0-1-0"), 
-Names::Find<Node>("root-0-2-0"), Names::Find<Node>("root-0-3-0"), Names::Find<Node>("root-1-0-0"), 
-Names::Find<Node>("root-1-1-0"), Names::Find<Node>("root-1-1-1"), Names::Find<Node>("root-1-2-0"), 
-Names::Find<Node>("root-2-0-0"), Names::Find<Node>("root-2-1-0"), Names::Find<Node>("root-2-2-0"), 
-Names::Find<Node>("root-2-2-1"), Names::Find<Node>("root-2-2-2"), Names::Find<Node>("root-2-3-0")
+Names::Find<Node>("root-build0-floor0-room0"), Names::Find<Node>("root-build0-floor0-room1"), Names::Find<Node>("root-build0-floor1-room0"), 
+Names::Find<Node>("root-build0-floor2-room0"), Names::Find<Node>("root-build0-floor3-room0"), Names::Find<Node>("root-build1-floor0-room0"), 
+Names::Find<Node>("root-build1-floor1-room0"), Names::Find<Node>("root-build1-floor1-room1"), Names::Find<Node>("root-build1-floor2-room0"), 
+Names::Find<Node>("root-build2-floor0-room0"), Names::Find<Node>("root-build2-floor1-room0"), Names::Find<Node>("root-build2-floor2-room0"), 
+Names::Find<Node>("root-build2-floor2-room1"), Names::Find<Node>("root-build2-floor2-room2"), Names::Find<Node>("root-build2-floor3-room0")
 			   };
 
   for (int i = 0; i < 4; i++) {
