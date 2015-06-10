@@ -157,7 +157,7 @@ Fib::findExactNextHopMatch(const pit::Entry& pitEntry,int level) const
   if (static_cast<bool>(entry))
     return entry;
   nameTreeEntry = m_nameTree.findExactMatch(prefix);
-std::cout<<"prefix: "<<prefix<<" pitEntry.getName():"<<pitEntry.getName()<<std::endl;
+//std::cout<<"prefix: "<<prefix<<" pitEntry.getName():"<<pitEntry.getName()<<std::endl;
   if (static_cast<bool>(nameTreeEntry)) {
     return nameTreeEntry->getFibEntry();
   }

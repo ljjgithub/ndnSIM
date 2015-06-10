@@ -60,7 +60,7 @@ void
 Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
 {
   int level = inFace.getLevel();
-std::cout<<"level: "<<level<<std::endl;
+//std::cout<<"level: "<<level<<std::endl;
 
   // receive Interest
   NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<
