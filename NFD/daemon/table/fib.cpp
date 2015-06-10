@@ -62,20 +62,22 @@ predicate_NameTreeEntry_hasFibEntry(const name_tree::Entry& entry)
   return static_cast<bool>(entry.getFibEntry());
 }
 
-shared_ptr<fib::Entry>
+/*shared_ptr<fib::Entry>
 Fib::findLongestPrefixMatch(const Name& prefix) const
 {
+std::cout<<"Fib::findLongestPrefixMatch(const Name& prefix): "<<prefix<<std::endl;
   shared_ptr<name_tree::Entry> nameTreeEntry =
     m_nameTree.findLongestPrefixMatch(prefix, &predicate_NameTreeEntry_hasFibEntry);
   if (static_cast<bool>(nameTreeEntry)) {
     return nameTreeEntry->getFibEntry();
   }
   return s_emptyEntry;
-}
+}*/
 
-shared_ptr<fib::Entry>
+/*shared_ptr<fib::Entry>
 Fib::findLongestPrefixMatch(shared_ptr<name_tree::Entry> nameTreeEntry) const
 {
+//std::cout<<"Fib::findLongestPrefixMatch(shared_ptr<name_tree::Entry> nameTreeEntry)"<<std::endl;
   shared_ptr<fib::Entry> entry = nameTreeEntry->getFibEntry();
   if (static_cast<bool>(entry))
     return entry;
@@ -90,30 +92,76 @@ Fib::findLongestPrefixMatch(shared_ptr<name_tree::Entry> nameTreeEntry) const
 shared_ptr<fib::Entry>
 Fib::findLongestPrefixMatch(const pit::Entry& pitEntry) const
 {
+//std::cout<<"Fib::findLongestPrefixMatch(const pit::Entry& pitEntry)"<<std::endl;
   shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.get(pitEntry);
 
   BOOST_ASSERT(static_cast<bool>(nameTreeEntry));
 
   return findLongestPrefixMatch(nameTreeEntry);
-}
+}*/
 
-shared_ptr<fib::Entry>
+/*shared_ptr<fib::Entry>
 Fib::findLongestPrefixMatch(const measurements::Entry& measurementsEntry) const
 {
+std::cout<<"Fib::findLongestPrefixMatch(const measurements::Entry& measurementsEntry)"<<std::endl;
   shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.get(measurementsEntry);
 
   BOOST_ASSERT(static_cast<bool>(nameTreeEntry));
 
   return findLongestPrefixMatch(nameTreeEntry);
-}
+}*/
 
 shared_ptr<fib::Entry>
 Fib::findExactMatch(const Name& prefix) const
 {
+std::cout<<"Fib::findExactMatch(const Name& prefix)"<<std::endl;
   shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.findExactMatch(prefix);
   if (static_cast<bool>(nameTreeEntry))
     return nameTreeEntry->getFibEntry();
   return shared_ptr<fib::Entry>();
+}
+
+shared_ptr<fib::Entry>
+Fib::findExactNextHopMatch(const pit::Entry& pitEntry,int level) const
+{
+  /*shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.get(pitEntry);
+
+  BOOST_ASSERT(static_cast<bool>(nameTreeEntry));
+
+  shared_ptr<fib::Entry> entry = nameTreeEntry->getFibEntry();
+  if (static_cast<bool>(entry))
+    return entry;
+  nameTreeEntry = m_nameTree.findExactNextHopMatch(nameTreeEntry,
+                                                    &predicate_NameTreeEntry_hasFibEntry);
+  if (static_cast<bool>(nameTreeEntry)) {
+    return nameTreeEntry->getFibEntry();
+  }
+  return s_emptyEntry;*/
+
+  Name prefix;
+  if(level>=0 && level+1<pitEntry.getName().size())
+    prefix.append(pitEntry.getName().get(level+1));
+  else
+  {
+    for(size_t i=0;i<pitEntry.getName().size();++i)
+    {
+      prefix.append(pitEntry.getName().get(i));
+    }
+  }
+
+  shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.get(pitEntry);
+
+  BOOST_ASSERT(static_cast<bool>(nameTreeEntry));
+
+  shared_ptr<fib::Entry> entry = nameTreeEntry->getFibEntry();
+  if (static_cast<bool>(entry))
+    return entry;
+  nameTreeEntry = m_nameTree.findExactMatch(prefix);
+std::cout<<"prefix: "<<prefix<<std::endl;
+  if (static_cast<bool>(nameTreeEntry)) {
+    return nameTreeEntry->getFibEntry();
+  }
+  return s_emptyEntry;
 }
 
 /*
@@ -151,7 +199,7 @@ Fib::insert(const Name& prefix, int level)
   }
 
 
-std::cout<< "Fib::insert " << prefix_new << std::endl;
+//std::cout<< "Fib::insert " << prefix_new << std::endl;
   shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.lookup(prefix_new);
   shared_ptr<fib::Entry> entry = nameTreeEntry->getFibEntry();
   if (static_cast<bool>(entry))

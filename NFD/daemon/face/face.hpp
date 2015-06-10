@@ -72,7 +72,7 @@ public:
     }
   };
 
-  Face(const FaceUri& remoteUri, const FaceUri& localUri, bool isLocal = false);
+  Face(const FaceUri& remoteUri, const FaceUri& localUri, int level, bool isLocal = false);
 
   virtual
   ~Face();
@@ -177,6 +177,14 @@ public: // attributes
   virtual ndn::nfd::FaceStatus
   getFaceStatus() const;
 
+  /** \return 
+   */
+  int
+  getLevel() const;
+
+  void
+  setLevel(int level);
+
 protected:
   // this is a non-virtual method
   bool
@@ -207,6 +215,8 @@ private:
   bool m_isOnDemand;
   bool m_isFailed;
   uint64_t m_metric;
+
+  int m_level;
 
   // allow setting FaceId
   friend class FaceTable;

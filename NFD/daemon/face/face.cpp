@@ -28,7 +28,7 @@
 
 namespace nfd {
 
-Face::Face(const FaceUri& remoteUri, const FaceUri& localUri, bool isLocal)
+Face::Face(const FaceUri& remoteUri, const FaceUri& localUri, int level, bool isLocal)
   : m_id(INVALID_FACEID)
   , m_isLocal(isLocal)
   , m_remoteUri(remoteUri)
@@ -36,6 +36,7 @@ Face::Face(const FaceUri& remoteUri, const FaceUri& localUri, bool isLocal)
   , m_isOnDemand(false)
   , m_isFailed(false)
   , m_metric(0)
+  , m_level(level)
 {
   onReceiveInterest += [this](const ndn::Interest&) { ++m_counters.getNInInterests(); };
   onReceiveData     += [this](const ndn::Data&) {     ++m_counters.getNInDatas(); };
@@ -163,6 +164,18 @@ Face::getFaceStatus() const
   this->getCounters().copyTo(status);
 
   return status;
+}
+
+int
+Face::getLevel() const
+{
+  return m_level;
+}
+
+void
+Face::setLevel(int level)
+{
+  m_level = level;
 }
 
 } //namespace nfd

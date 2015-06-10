@@ -173,6 +173,13 @@ public: // matching
                          const name_tree::EntrySelector& entrySelector =
                          name_tree::AnyEntry()) const;
 
+  /**
+   * 
+   */
+  shared_ptr<name_tree::Entry>
+  findExactNextHopMatch(shared_ptr<name_tree::Entry> entry,
+                        const name_tree::EntrySelector& entrySelector) const;
+
   /** \brief Enumerate all the name prefixes that satisfy the prefix and entrySelector
    *  \return an unspecified type that have .begin() and .end() methods
    *          and is usable with range-based for

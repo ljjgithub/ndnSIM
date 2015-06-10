@@ -54,19 +54,23 @@ public:
 
 public: // lookup
   /// performs a longest prefix match
-  shared_ptr<fib::Entry>
-  findLongestPrefixMatch(const Name& prefix) const;
+  //shared_ptr<fib::Entry>
+  //findLongestPrefixMatch(const Name& prefix) const;
 
   /// performs a longest prefix match
-  shared_ptr<fib::Entry>
-  findLongestPrefixMatch(const pit::Entry& pitEntry) const;
+  /*shared_ptr<fib::Entry>
+  findLongestPrefixMatch(const pit::Entry& pitEntry) const;*/
 
   /// performs a longest prefix match
-  shared_ptr<fib::Entry>
-  findLongestPrefixMatch(const measurements::Entry& measurementsEntry) const;
+  //shared_ptr<fib::Entry>
+  //findLongestPrefixMatch(const measurements::Entry& measurementsEntry) const;
 
   shared_ptr<fib::Entry>
   findExactMatch(const Name& prefix) const;
+
+  //our new prefix match
+  shared_ptr<fib::Entry>
+  findExactNextHopMatch(const pit::Entry& pitEntry, int level) const;
 
 public: // mutation
   /** \brief inserts a FIB entry for prefix
@@ -144,8 +148,8 @@ public: // enumeration
   };
 
 private:
-  shared_ptr<fib::Entry>
-  findLongestPrefixMatch(shared_ptr<name_tree::Entry> nameTreeEntry) const;
+  /*shared_ptr<fib::Entry>
+  findLongestPrefixMatch(shared_ptr<name_tree::Entry> nameTreeEntry) const;*/
 
   void
   erase(shared_ptr<name_tree::Entry> nameTreeEntry);

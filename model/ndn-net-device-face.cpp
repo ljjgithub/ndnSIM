@@ -31,6 +31,10 @@
 // #include "ns3/address.h"
 #include "ns3/point-to-point-net-device.h"
 #include "ns3/channel.h"
+ 
+#include "ns3/core-module.h"
+#include "ns3/network-module.h"
+#include "ns3/ndnSIM-module.h"
 
 #include "../utils/ndn-fw-hop-count-tag.hpp"
 
@@ -40,7 +44,7 @@ namespace ns3 {
 namespace ndn {
 
 NetDeviceFace::NetDeviceFace(Ptr<Node> node, const Ptr<NetDevice>& netDevice)
-  : Face(FaceUri("netDeviceFace://"), FaceUri("netDeviceFace://"))
+  : Face(FaceUri("netDeviceFace://"), FaceUri("netDeviceFace://"),getLevelFromNode(node))
   , m_node(node)
   , m_netDevice(netDevice)
 {
@@ -59,6 +63,19 @@ NetDeviceFace::~NetDeviceFace()
 {
   NS_LOG_FUNCTION_NOARGS();
   close();
+}
+
+int 
+NetDeviceFace::getLevelFromNode(Ptr<Node> node)
+{
+  std::string nodeName = Names::FindName(node);
+  int level=0;
+  for(int i=0;i<nodeName.length();++i)
+  {
+    if(nodeName[i]=='-')
+      level++;
+  }
+  return level;
 }
 
 void

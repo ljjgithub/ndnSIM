@@ -59,6 +59,9 @@ Forwarder::~Forwarder()
 void
 Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
 {
+  int level = inFace.getLevel();
+std::cout<<"level: "<<level<<std::endl;
+
   // receive Interest
   NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<
                 " interest=" << interest.getName());
@@ -128,7 +131,7 @@ Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
   this->setUnsatisfyTimer(pitEntry);
 
   // FIB lookup
-  shared_ptr<fib::Entry> fibEntry = m_fib.findLongestPrefixMatch(*pitEntry);
+  shared_ptr<fib::Entry> fibEntry = m_fib.findExactNextHopMatch(*pitEntry,level);
 
   // dispatch to strategy
   this->dispatchToStrategy(pitEntry, bind(&Strategy::afterReceiveInterest, _1,

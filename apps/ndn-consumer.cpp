@@ -28,6 +28,9 @@
 #include "ns3/uinteger.h"
 #include "ns3/integer.h"
 #include "ns3/double.h"
+#include "ns3/core-module.h"
+#include "ns3/network-module.h"
+#include "ns3/ndnSIM-module.h"
 
 #include "utils/ndn-ns3-packet-tag.hpp"
 #include "model/ndn-app-face.hpp"
@@ -195,8 +198,17 @@ Consumer::SendPacket()
 
   WillSendOutInterest(seq);
 
+  /*std::string nodeName = Names::FindName(this->GetNode());
+  int level=0;
+  for(int i=0;i<nodeName.length();++i)
+  {
+    if(nodeName[i]=='-')
+      level++;
+  }
+  m_face->setLevel(level);*/
   m_transmittedInterests(interest, this, m_face);
   m_face->onReceiveInterest(*interest);
+  //std::cout<<Names::FindName(this->GetNode())<<std::endl;
 
   ScheduleNextPacket();
 }

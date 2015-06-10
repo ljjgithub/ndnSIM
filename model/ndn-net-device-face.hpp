@@ -83,6 +83,9 @@ private:
   receiveFromNetDevice(Ptr<NetDevice> device, Ptr<const Packet> p, uint16_t protocol,
                        const Address& from, const Address& to, NetDevice::PacketType packetType);
 
+  int 
+  getLevelFromNode(Ptr<Node> node);
+
 private:
   Ptr<Node> m_node;
   Ptr<NetDevice> m_netDevice; ///< \brief Smart pointer to NetDevice
