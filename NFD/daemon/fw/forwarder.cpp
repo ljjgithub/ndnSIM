@@ -119,7 +119,7 @@ Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
       this->setStragglerTimer(pitEntry, true, csMatch->getFreshnessPeriod());
 
       // goto outgoing Data pipeline
-      this->onOutgoingData(*csMatch, inFace);
+      this->onOutgoingData(*csMatch, inFace);std::cout<<"onOutgoingData"<<std::endl;
       return;
     }
   }

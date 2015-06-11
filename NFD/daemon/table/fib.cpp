@@ -148,8 +148,8 @@ Fib::findExactNextHopMatch(const pit::Entry& pitEntry,int level) const
       prefix.append(pitEntry.getName().get(i));
     }
   }
-  if(level==0)
-    std::cout<<prefix<<" "<<pitEntry.getName()<<std::endl;
+  //if(level==0)
+  //  std::cout<<prefix<<" "<<pitEntry.getName()<<std::endl;
 
   shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.get(pitEntry);
 
