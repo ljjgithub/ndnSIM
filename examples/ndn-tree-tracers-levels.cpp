@@ -78,20 +78,20 @@ main(int argc, char* argv[])
   Ptr<Node> consumers[4] = {
 Names::Find<Node>("root"),
 Names::Find<Node>("root-build0"), Names::Find<Node>("root-build1"), Names::Find<Node>("root-build2")
-			   };
+         };
   Ptr<Node> producers[15] = {
 Names::Find<Node>("root-build0-floor0-room0"), Names::Find<Node>("root-build0-floor0-room1"), Names::Find<Node>("root-build0-floor1-room0"), 
 Names::Find<Node>("root-build0-floor2-room0"), Names::Find<Node>("root-build0-floor3-room0"), Names::Find<Node>("root-build1-floor0-room0"), 
 Names::Find<Node>("root-build1-floor1-room0"), Names::Find<Node>("root-build1-floor1-room1"), Names::Find<Node>("root-build1-floor2-room0"), 
 Names::Find<Node>("root-build2-floor0-room0"), Names::Find<Node>("root-build2-floor1-room0"), Names::Find<Node>("root-build2-floor2-room0"), 
 Names::Find<Node>("root-build2-floor2-room1"), Names::Find<Node>("root-build2-floor2-room2"), Names::Find<Node>("root-build2-floor3-room0")
-			   };
+         };
 
   for (int i = 0; i < 4; i++) {
     ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
     consumerHelper.SetAttribute("Frequency", StringValue("100")); // 100 interests a second
 
-    consumerHelper.SetPrefix(getNodePrefix(Names::FindName(producers[i*3])));
+    consumerHelper.SetPrefix(getNodePrefix(Names::FindName(producers[i*2])));
     consumerHelper.Install(consumers[i]);
   }
 

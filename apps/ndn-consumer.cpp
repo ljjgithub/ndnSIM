@@ -198,14 +198,14 @@ Consumer::SendPacket()
 
   WillSendOutInterest(seq);
 
-  /*std::string nodeName = Names::FindName(this->GetNode());
+  std::string nodeName = Names::FindName(this->GetNode());
   int level=0;
   for(int i=0;i<nodeName.length();++i)
   {
     if(nodeName[i]=='-')
       level++;
   }
-  m_face->setLevel(level);*/
+  m_face->setLevel(level);
   m_transmittedInterests(interest, this, m_face);
   m_face->onReceiveInterest(*interest);
   //std::cout<<Names::FindName(this->GetNode())<<std::endl;
