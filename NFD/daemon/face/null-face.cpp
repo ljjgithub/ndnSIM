@@ -31,7 +31,7 @@ namespace nfd {
 // NullFace has isLocal=true to enable creating a "blackhole" FIB entry under /localhost.
 
 NullFace::NullFace(const FaceUri& uri)
-  : Face(uri, uri, true)
+  : Face(uri, uri, 0, true)
 {
 }
 

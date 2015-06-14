@@ -94,7 +94,7 @@ Producer::StopApplication()
 
 void
 Producer::OnInterest(shared_ptr<const Interest> interest)
-{
+{std::cout<<"producer OnInterest: "<<interest->getName()<<std::endl;
   App::OnInterest(interest); // tracing inside
 
   NS_LOG_FUNCTION(this << interest);
@@ -125,6 +125,8 @@ Producer::OnInterest(shared_ptr<const Interest> interest)
   data->setSignature(signature);
 
   NS_LOG_INFO("node(" << GetNode()->GetId() << ") respodning with Data: " << data->getName());
+
+  std::cout<<data->getName()<<std::endl;
 
   // to create real wire encoding
   data->wireEncode();

@@ -90,11 +90,11 @@ Pit::insert(const Interest& interest)
 pit::DataMatchResult
 Pit::findAllDataMatches(const Data& data) const
 {
-  std::cout<<data.getName()<<std::endl;
+  std::cout<<"Pit::findAllDataMatches"<<data.getName()<<std::endl;
   auto&& ntMatches = m_nameTree.findAllMatches(data.getName(),
     [] (const name_tree::Entry& entry) { return entry.hasPitEntries(); });
 
-std::cout<<"@";
+//std::cout<<"@";
   pit::DataMatchResult matches;
   for (const name_tree::Entry& nte : ntMatches) {
     for (const shared_ptr<pit::Entry>& pitEntry : nte.getPitEntries()) {

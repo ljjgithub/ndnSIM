@@ -263,11 +263,12 @@ Forwarder::onInterestFinalize(shared_ptr<pit::Entry> pitEntry, bool isSatisfied,
 void
 Forwarder::onIncomingData(Face& inFace, const Data& data)
 {
+  //std::cout<<"onIncomingData"<<std::endl;
   // receive Data
   NFD_LOG_DEBUG("onIncomingData face=" << inFace.getId() << " data=" << data.getName());
   const_cast<Data&>(data).setIncomingFaceId(inFace.getId());
   ++m_counters.getNInDatas();
-
+//std::cout<<inFace.isLocal()<<" "<<LOCALHOST_NAME.isPrefixOf(data.getName())<<std::endl;
   // /localhost scope control
   bool isViolatingLocalhost = !inFace.isLocal() &&
                               LOCALHOST_NAME.isPrefixOf(data.getName());
@@ -285,7 +286,7 @@ Forwarder::onIncomingData(Face& inFace, const Data& data)
     this->onDataUnsolicited(inFace, data);
     return;
   }
-
+std::cout<<"pit match"<<std::endl;
   // CS insert
   if (m_csFromNdnSim == nullptr)
     m_cs.insert(data);

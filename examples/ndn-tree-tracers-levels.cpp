@@ -92,6 +92,7 @@ Names::Find<Node>("root-build2-floor2-room1"), Names::Find<Node>("root-build2-fl
     consumerHelper.SetAttribute("Frequency", StringValue("100")); // 100 interests a second
 
     consumerHelper.SetPrefix(getNodePrefix(Names::FindName(producers[i*2])));
+    //consumerHelper.SetPrefix("root");
     consumerHelper.Install(consumers[i]);
   }
 
@@ -101,6 +102,8 @@ Names::Find<Node>("root-build2-floor2-room1"), Names::Find<Node>("root-build2-fl
 
     ndnGlobalRoutingHelper.AddOrigins(getNodePrefix(Names::FindName(producers[i])), producers[i]);
     producerHelper.SetPrefix(getNodePrefix(Names::FindName(producers[i])));
+    //ndnGlobalRoutingHelper.AddOrigins("/root/", producers[i]);
+    //producerHelper.SetPrefix("/root/");
     producerHelper.Install(producers[i]);
   }
 

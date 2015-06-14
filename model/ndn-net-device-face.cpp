@@ -36,6 +36,8 @@
 #include "ns3/network-module.h"
 #include "ns3/ndnSIM-module.h"
 
+ #include "ns3/simulator.h"
+
 #include "../utils/ndn-fw-hop-count-tag.hpp"
 
 NS_LOG_COMPONENT_DEFINE("ndn.NetDeviceFace");
@@ -44,7 +46,7 @@ namespace ns3 {
 namespace ndn {
 
 NetDeviceFace::NetDeviceFace(Ptr<Node> node, const Ptr<NetDevice>& netDevice)
-  : Face(FaceUri("netDeviceFace://"), FaceUri("netDeviceFace://"),getLevelFromNode(node))
+  : Face(FaceUri("netDeviceFace://"), FaceUri("netDeviceFace://"),getLevelFromNode(node),false)
   , m_node(node)
   , m_netDevice(netDevice)
 {
@@ -111,7 +113,8 @@ NetDeviceFace::sendInterest(const Interest& interest)
 {
   NS_LOG_FUNCTION(this << &interest);
 
-  this->onSendInterest(interest);
+  this->onSendInterest(interest);// to decouple callbacks
+  //Simulator::ScheduleNow(&App::OnInterest, m_app, interest.shared_from_this());
 
   Ptr<Packet> packet = Convert::ToPacket(interest);
   send(packet);

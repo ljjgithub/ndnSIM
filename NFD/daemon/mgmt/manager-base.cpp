@@ -91,7 +91,7 @@ ManagerBase::sendResponse(const Name& name,
                 << " text: " << response.getText());
 
   const Block& encodedControl = response.wireEncode();
-
+//std::cout<<name<<std::endl;
   shared_ptr<Data> responseData(make_shared<Data>(name));
   responseData->setContent(encodedControl);
 

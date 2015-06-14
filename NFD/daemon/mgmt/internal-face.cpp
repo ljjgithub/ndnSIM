@@ -32,7 +32,7 @@ namespace nfd {
 NFD_LOG_INIT("InternalFace");
 
 InternalFace::InternalFace()
-  : Face(FaceUri("internal://"), FaceUri("internal://"), true)
+  : Face(FaceUri("internal://"), FaceUri("internal://"), 0, true)
 {
 }
 

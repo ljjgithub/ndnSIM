@@ -25,6 +25,10 @@
 #include "ns3/assert.h"
 #include "ns3/simulator.h"
 
+#include "ns3/core-module.h"
+#include "ns3/network-module.h"
+#include "ns3/ndnSIM-module.h"
+
 #include "apps/ndn-app.hpp"
 
 NS_LOG_COMPONENT_DEFINE("ndn.AppFace");
@@ -37,7 +41,7 @@ AppFace::AppFace(Ptr<App> app)
   , m_node(app->GetNode())
   , m_app(app)
 {
-  NS_LOG_FUNCTION(this << app);
+  NS_LOG_FUNCTION(this << app);std::cout<<Names::FindName(m_node)<<std::endl;
 
   NS_ASSERT(m_app != 0);
 }

@@ -101,7 +101,7 @@ private:
 
 inline
 LocalFace::LocalFace(const FaceUri& remoteUri, const FaceUri& localUri)
-  : Face(remoteUri, localUri, true)
+  : Face(remoteUri, localUri, 0 ,true)
   , m_localControlHeaderFeatures(LocalFace::LOCAL_CONTROL_FEATURE_MAX)
 {
 }

@@ -72,7 +72,7 @@ public:
     }
   };
 
-  Face(const FaceUri& remoteUri, const FaceUri& localUri, int level, bool isLocal = false);
+  Face(const FaceUri& remoteUri, const FaceUri& localUri, int level, bool isLocal);
 
   virtual
   ~Face();
