@@ -114,7 +114,7 @@ std::cout<<"Fib::findLongestPrefixMatch(const measurements::Entry& measurementsE
 shared_ptr<fib::Entry>
 Fib::findExactMatch(const Name& prefix) const
 {
-std::cout<<"Fib::findExactMatch(const Name& prefix)"<<std::endl;
+//std::cout<<"Fib::findExactMatch(const Name& prefix)"<<std::endl;
   shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.findExactMatch(prefix);
   if (static_cast<bool>(nameTreeEntry))
     return nameTreeEntry->getFibEntry();
@@ -122,7 +122,7 @@ std::cout<<"Fib::findExactMatch(const Name& prefix)"<<std::endl;
 }
 
 shared_ptr<fib::Entry>
-Fib::findExactNextHopMatch(const pit::Entry& pitEntry,int level) const
+Fib::findExactNextHopMatch(const pit::Entry& pitEntry,Name prefix) const
 {
   /*shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.get(pitEntry);
 
@@ -138,24 +138,6 @@ Fib::findExactNextHopMatch(const pit::Entry& pitEntry,int level) const
   }
   return s_emptyEntry;*/
 
-  Name prefix;
-  if(level>=0 && level+2<pitEntry.getName().size())
-    prefix.append(pitEntry.getName().get(level+1));
-  /*else if(level+2<pitEntry.getName().size())
-  {
-    for(size_t i=0;i<pitEntry.getName().size();++i)
-    {
-      prefix.append(pitEntry.getName().get(i));
-    }
-  }*/
-  /*Name test("root");
-  Name test2;
-  test2.append(pitEntry.getName().get(0));
-  if(!(test==test2))
-    std::cout<<pitEntry.getName().get(0)<<std::endl;*/
-  //if(level==3)
-  //  std::cout<<prefix<<" "<<pitEntry.getName()<<std::endl;
-
   shared_ptr<name_tree::Entry> nameTreeEntry = m_nameTree.get(pitEntry);
 
   BOOST_ASSERT(static_cast<bool>(nameTreeEntry));
@@ -168,7 +150,7 @@ Fib::findExactNextHopMatch(const pit::Entry& pitEntry,int level) const
   if (static_cast<bool>(nameTreeEntry)) {
     return nameTreeEntry->getFibEntry();
   }
-  std::cout<<"prefix: "<<prefix<<std::endl;
+  //std::cout<<"prefix: "<<prefix<<std::endl;
   nameTreeEntry = m_nameTree.findLongestPrefixMatch(nameTreeEntry,
                                                     &predicate_NameTreeEntry_hasFibEntry);
   if (static_cast<bool>(nameTreeEntry)) {

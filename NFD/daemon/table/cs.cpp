@@ -414,7 +414,7 @@ Cs::find(const Interest& interest) const
 
   if (!(*topLayer)->empty())
     {
-  std::cout<<"cs find(): "<<interest.getName()<<std::endl;
+  //std::cout<<"cs find(): "<<interest.getName()<<std::endl;
       //start from the upper layer towards bottom
       int layer = m_skipList.size() - 1;
       for (SkipList::const_reverse_iterator rit = topLayer; rit != m_skipList.rend(); ++rit)

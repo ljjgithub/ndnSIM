@@ -74,6 +74,9 @@ public:
   Ptr<NetDevice>
   GetNetDevice() const;
 
+  Ptr<Node> 
+  GetNode() const;
+
 private:
   void
   send(Ptr<Packet> packet);
@@ -85,6 +88,7 @@ private:
 
   int 
   getLevelFromNode(Ptr<Node> node);
+
 
 private:
   Ptr<Node> m_node;

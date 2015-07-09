@@ -41,7 +41,7 @@ AppFace::AppFace(Ptr<App> app)
   , m_node(app->GetNode())
   , m_app(app)
 {
-  NS_LOG_FUNCTION(this << app);std::cout<<Names::FindName(m_node)<<std::endl;
+  NS_LOG_FUNCTION(this << app);//std::cout<<Names::FindName(m_node)<<std::endl;
 
   NS_ASSERT(m_app != 0);
 }

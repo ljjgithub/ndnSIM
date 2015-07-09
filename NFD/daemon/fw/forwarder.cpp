@@ -56,12 +56,41 @@ Forwarder::~Forwarder()
 
 }
 
-void
-Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
-{
-  int level = inFace.getLevel();
-//std::cout<<"level: "<<level<<std::endl;
+int
+hasLeft(std::string s){
+  if(s.find("%5B")==std::string::npos)
+    return 0;
+  int cnt=0;
+  for(int i=0;i<s.length();++i){
+    if(s.find("%5B",i)==i)
+      cnt++;
+  }
+  return cnt;
+}
 
+int
+hasRight(std::string s){
+  if(s.find("%5D")==std::string::npos)
+    return 0;
+  int cnt=0;
+  for(int i=0;i<s.length();++i){
+    if(s.find("%5D",i)==i)
+      cnt++;
+  }//std::cout<<"cnt: "<<cnt<<std::endl;
+  return cnt;
+}
+
+int
+hasDot(std::string s){
+  if(s.find("%2C")==std::string::npos)
+    return 0;
+  else
+    return 1;
+}
+
+void
+Forwarder::onIncomingSubInterest(Face& inFace, const Interest& interest, Name prefix)
+{
   // receive Interest
   NFD_LOG_DEBUG("onIncomingInterest face=" << inFace.getId() <<
                 " interest=" << interest.getName());
@@ -131,11 +160,80 @@ Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
   this->setUnsatisfyTimer(pitEntry);
 
   // FIB lookup
-  shared_ptr<fib::Entry> fibEntry = m_fib.findExactNextHopMatch(*pitEntry,level);
+  shared_ptr<fib::Entry> fibEntry = m_fib.findExactNextHopMatch(*pitEntry,prefix);
 
   // dispatch to strategy
   this->dispatchToStrategy(pitEntry, bind(&Strategy::afterReceiveInterest, _1,
                                           cref(inFace), cref(interest), fibEntry, pitEntry));
+}
+
+void
+Forwarder::onIncomingInterest(Face& inFace, const Interest& interest)
+{
+  int level = inFace.getLevel();
+
+  Name prefix;
+  Name interestName = interest.getName();
+
+  if(level>=0 && level+2<interestName.size()){
+    if(hasLeft(interestName.get(level+1).toUri())){
+
+      Name pitEntryNameToDivide;
+      for(int i=level+1;i<interestName.size()-1;++i)
+        pitEntryNameToDivide.append(interestName.get(i));
+      std::string nameString = pitEntryNameToDivide.toUri();
+      nameString = nameString.substr(4,nameString.length()-7);std::cout<<nameString<<std::endl;
+
+      Name pitEntryNameToDivideNew(nameString);
+      int bracketCount = 0;
+      int begin = 0;
+      for(int i=0;i<pitEntryNameToDivideNew.size();++i){
+
+        if(hasLeft(pitEntryNameToDivideNew.get(i).toUri())){
+          bracketCount+=hasLeft(pitEntryNameToDivideNew.get(i).toUri());
+        }
+
+        if(hasRight(pitEntryNameToDivideNew.get(i).toUri())){
+          bracketCount-=hasRight(pitEntryNameToDivideNew.get(i).toUri());
+        }
+
+        if(hasDot(pitEntryNameToDivideNew.get(i).toUri()) || i==pitEntryNameToDivideNew.size()-1){
+          if(bracketCount==0){
+            Name subPrefix;
+            for(int j=0;j<=level;++j){
+              subPrefix.append(interestName.get(j));
+            }
+            for(int j=begin;j<i;++j){
+              subPrefix.append(pitEntryNameToDivideNew.get(j));
+            }
+            begin = i+1;
+            if(hasDot(pitEntryNameToDivideNew.get(i).toUri())){
+              subPrefix.append(pitEntryNameToDivideNew.get(i).toUri().substr(0,pitEntryNameToDivideNew.get(i).size()-3));
+            }else{
+              subPrefix.append(pitEntryNameToDivideNew.get(i).toUri().substr(0,pitEntryNameToDivideNew.get(i).size()));
+            }
+            
+
+            std::cout<<"subPrefix: "<<subPrefix<<" "<<subPrefix.get(level+1)<<std::endl;
+            std::cout<<"interest name: "<<interest.getName()<<std::endl;
+
+            Interest interestNew(interest);
+            subPrefix.append(interest.getName().get(interest.getName().size()-1));
+            interestNew.setName(subPrefix);
+            prefix.append(subPrefix.get(level+1));
+            onIncomingSubInterest(inFace, interestNew, prefix);
+          }
+        }
+      }
+    }else{
+      prefix.append(interestName.get(level+1));
+      onIncomingSubInterest(inFace,interest,prefix);
+    }
+
+  }else if(level+2==interestName.size()){
+    onIncomingSubInterest(inFace,interest,prefix);
+  }
+  
 }
 
 void
@@ -286,7 +384,7 @@ Forwarder::onIncomingData(Face& inFace, const Data& data)
     this->onDataUnsolicited(inFace, data);
     return;
   }
-std::cout<<"pit match"<<std::endl;
+//std::cout<<"pit match"<<std::endl;
   // CS insert
   if (m_csFromNdnSim == nullptr)
     m_cs.insert(data);

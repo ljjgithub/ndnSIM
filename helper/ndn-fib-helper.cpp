@@ -51,8 +51,6 @@ NS_LOG_COMPONENT_DEFINE("ndn.FibHelper");
 void
 FibHelper::AddNextHop(const ControlParameters& parameters, Ptr<Node> node)
 {
-  int level = 0;
-
   NS_LOG_DEBUG("Add Next Hop command was initialized");
   Block encodedParameters(parameters.wireEncode());
 
@@ -67,6 +65,7 @@ FibHelper::AddNextHop(const ControlParameters& parameters, Ptr<Node> node)
   shared_ptr<nfd::FibManager> fibManager = l3protocol->getFibManager();
 
   //count level
+  int level = 0;
   std::string name = Names::FindName(node);
   for(int i=0;i<name.length();++i)
   {

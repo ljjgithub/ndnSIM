@@ -93,6 +93,12 @@ NetDeviceFace::GetNetDevice() const
   return m_netDevice;
 }
 
+Ptr<Node>
+NetDeviceFace::GetNode() const
+{
+  return m_node;
+}
+
 void
 NetDeviceFace::send(Ptr<Packet> packet)
 {

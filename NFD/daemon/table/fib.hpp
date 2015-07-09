@@ -70,7 +70,7 @@ public: // lookup
 
   //our new prefix match
   shared_ptr<fib::Entry>
-  findExactNextHopMatch(const pit::Entry& pitEntry, int level) const;
+  findExactNextHopMatch(const pit::Entry& pitEntry, Name prefix) const;
 
 public: // mutation
   /** \brief inserts a FIB entry for prefix

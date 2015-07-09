@@ -37,6 +37,10 @@ namespace ns3 {
 
 std::string getNodePrefix(std::string s)
 {
+  for(int i=0;i<s.length();++i){
+    if(s[i]==',')
+      s = s.substr(0,i+1)+'/'+s.substr(i+1,s.length()-1-i);
+  }
   std::string outs = "/";
   int index=0;
   while(index<s.length()&&s.find('-',index)!=std::string::npos)
@@ -77,7 +81,8 @@ main(int argc, char* argv[])
   // Getting containers for the consumer/producer
   Ptr<Node> consumers[4] = {
 Names::Find<Node>("root"),
-Names::Find<Node>("root-build0"), Names::Find<Node>("root-build1"), Names::Find<Node>("root-build2")
+Names::Find<Node>("root-build0"), Names::Find<Node>("root-build1"), 
+Names::Find<Node>("root-build2")
          };
   Ptr<Node> producers[15] = {
 Names::Find<Node>("root-build0-floor0-room0"), Names::Find<Node>("root-build0-floor0-room1"), Names::Find<Node>("root-build0-floor1-room0"), 
@@ -87,14 +92,21 @@ Names::Find<Node>("root-build2-floor0-room0"), Names::Find<Node>("root-build2-fl
 Names::Find<Node>("root-build2-floor2-room1"), Names::Find<Node>("root-build2-floor2-room2"), Names::Find<Node>("root-build2-floor3-room0")
          };
 
-  for (int i = 0; i < 4; i++) {
-    ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
-    consumerHelper.SetAttribute("Frequency", StringValue("100")); // 100 interests a second
 
-    consumerHelper.SetPrefix(getNodePrefix(Names::FindName(producers[i*2])));
-    //consumerHelper.SetPrefix("root");
-    consumerHelper.Install(consumers[i]);
-  }
+  ndn::AppHelper consumerHelper("ns3::ndn::ConsumerCbr");
+  consumerHelper.SetAttribute("Frequency", StringValue("100")); // 100 interests a second
+
+  consumerHelper.SetPrefix(getNodePrefix("root-[build1-floor0-room0,build2-[floor0-room0,floor2-[room0,room1,room2]]]"));
+  consumerHelper.Install(consumers[0]);
+
+  consumerHelper.SetPrefix(getNodePrefix("root-build0-floor0-room0"));
+  consumerHelper.Install(consumers[1]);
+
+  consumerHelper.SetPrefix(getNodePrefix("root-build1-[floor0-room0,floor1-room0]"));
+  consumerHelper.Install(consumers[2]);
+
+  consumerHelper.SetPrefix(getNodePrefix("root-[build0-floor0-[room0,room1],build2-floor2-room1]"));
+  consumerHelper.Install(consumers[3]);
 
   for (int i = 0; i < 15; i++) {
     ndn::AppHelper producerHelper("ns3::ndn::Producer");
@@ -102,8 +114,6 @@ Names::Find<Node>("root-build2-floor2-room1"), Names::Find<Node>("root-build2-fl
 
     ndnGlobalRoutingHelper.AddOrigins(getNodePrefix(Names::FindName(producers[i])), producers[i]);
     producerHelper.SetPrefix(getNodePrefix(Names::FindName(producers[i])));
-    //ndnGlobalRoutingHelper.AddOrigins("/root/", producers[i]);
-    //producerHelper.SetPrefix("/root/");
     producerHelper.Install(producers[i]);
   }
 

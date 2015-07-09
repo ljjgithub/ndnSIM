@@ -129,6 +129,9 @@ PUBLIC_WITH_TESTS_ELSE_PRIVATE: // pipelines
   VIRTUAL_WITH_TESTS void
   onIncomingInterest(Face& inFace, const Interest& interest);
 
+  VIRTUAL_WITH_TESTS void
+  onIncomingSubInterest(Face& inFace, const Interest& interest, Name prefix);
+
   /** \brief Interest loop pipeline
    */
   VIRTUAL_WITH_TESTS void
